@@ -21,7 +21,6 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     private MediaPlayer mediaPlayer;
 
-    private SeekBar seekBar;
 
     private Uri video;
 
@@ -50,7 +49,6 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(getContext(), video);
             mediaPlayer.setSurface(s);
-            seekBar.setMax(mediaPlayer.getDuration());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
