@@ -23,12 +23,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     private SeekBar seekBar;
 
-    private android.os.Handler handler;
-
-    private Runnable updater;
-
     private Uri video;
-
 
     public SRBeastModeVideoView(Context context) {
         super(context);
@@ -113,53 +108,26 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         setTransform(matrix);
     }
 
-    public void initializeBeastMode(Uri uri) {
-        video = uri;
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-            seekBar = new SeekBar(getContext());
-            handler = new android.os.Handler();
-            updater = new Runnable() {
-                @Override
-                public void run() {
-                    seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                    handler.postDelayed(this, 50);
-                }
-            };
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser)
-                        mediaPlayer.seekTo(progress);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-            });
-            setSurfaceTextureListener(this);
-        }
-    }
-
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
 
-    public void setDataSource(Uri uri) {
+    public void initializeBeastMode() {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+            setSurfaceTextureListener(this);
+        }
+    }
+
+    public void setDataSource(Uri uri){
         video = uri;
     }
 
-    public void start() {
+    public void start(){
         mediaPlayer.start();
     }
 
-    public void pause() {
+    public void pause(){
         mediaPlayer.pause();
     }
 }
