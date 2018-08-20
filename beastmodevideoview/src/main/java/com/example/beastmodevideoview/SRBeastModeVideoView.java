@@ -11,6 +11,9 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.SeekBar;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import java.io.IOException;
 
 /**
@@ -52,7 +55,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
             FileInputStream inputStream = new FileInputStream(file);
             mediaPlayer.setDataSource(inputStream.getFD());
             inputStream.close();
-            mediaPlayer.setDataSource(fd);
+            //mediaPlayer.setDataSource(fd);
             mediaPlayer.setSurface(s);
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
