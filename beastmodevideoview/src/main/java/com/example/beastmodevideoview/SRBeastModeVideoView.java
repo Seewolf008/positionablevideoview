@@ -21,9 +21,10 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     private MediaPlayer mediaPlayer;
 
-
     private Uri video;
 
+    private String path;
+    
     public SRBeastModeVideoView(Context context) {
         super(context);
     }
@@ -47,7 +48,11 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
         try {
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(getContext(), video);
+            File file = new File(path);
+            FileInputStream inputStream = new FileInputStream(file);
+            mediaPlayer.setDataSource(inputStream.getFD());
+            inputStream.close();
+            mediaPlayer.setDataSource(fd);
             mediaPlayer.setSurface(s);
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
@@ -119,6 +124,10 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     public void setDataSource(Uri uri){
         video = uri;
+    }
+    
+    public void setDataSource(String path){
+        this.path = path;
     }
 
     public void start(){
