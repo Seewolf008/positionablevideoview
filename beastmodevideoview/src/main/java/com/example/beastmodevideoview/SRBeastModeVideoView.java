@@ -27,20 +27,22 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     private Uri video;
 
     private String path;
-    
-    public SRBeastModeVideoView(Context context) {
+
+    private float bot;
+
+    public SrBeastModeVideoView(Context context) {
         super(context);
     }
 
-    public SRBeastModeVideoView(Context context, AttributeSet attrs) {
+    public SrBeastModeVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SRBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SrBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public SRBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SrBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -50,15 +52,22 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         Surface s = new Surface(surface);
 
         try {
-            mediaPlayer = new MediaPlayer();
+            //mediaPlayer = new MediaPlayer();
             File file = new File(path);
             FileInputStream inputStream = new FileInputStream(file);
             mediaPlayer.setDataSource(inputStream.getFD());
             inputStream.close();
-            //mediaPlayer.setDataSource(fd);
             mediaPlayer.setSurface(s);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.prepare();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(final MediaPlayer mp) {
+                    while (mediaPlayer.getVideoHeight() == 0) {
+                    }
+                    mediaPlayer.start();
+                    calculateScaling(bot);
+                }
+            });
+            mediaPlayer.prepareAsync();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
@@ -74,6 +83,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
@@ -103,6 +113,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         return perc * percantage;
     }
 
+
     public void calculateScaling(float i) {
         Matrix matrix = new Matrix();
         float a = ((float) getWidth() / (float) mediaPlayer.getVideoWidth());
@@ -125,20 +136,22 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         }
     }
 
-    public void setDataSource(Uri uri){
+    public void setDataSource(Uri uri) {
         video = uri;
     }
-    
-    public void setDataSource(String path){
+
+    public void setDataSource(String path, float bot) {
         this.path = path;
+        this.bot = bot;
     }
 
-    public void start(){
+    public void start() {
         mediaPlayer.start();
     }
 
-    public void pause(){
+    public void pause() {
         mediaPlayer.pause();
     }
 }
+
 
