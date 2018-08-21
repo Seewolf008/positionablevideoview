@@ -30,19 +30,19 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     private float bot;
 
-    public SrBeastModeVideoView(Context context) {
+    public SRBeastModeVideoView(Context context) {
         super(context);
     }
 
-    public SrBeastModeVideoView(Context context, AttributeSet attrs) {
+    public SRBeastModeVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SrBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SRBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public SrBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SRBeastModeVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
