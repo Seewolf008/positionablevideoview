@@ -83,7 +83,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
                     mediaController.setAnchorView(SRBeastModeVideoView.this);
                     mediaController.setEnabled(true);
                     mediaController.show();
-                    calculateScaling(1920);
+                    calculateScaling(bot);
                 }
             });
 
@@ -150,8 +150,9 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         return mediaPlayer;
     }
 
-    public void initializeBeastMode(Uri videoUri) {
-        video = videoUri;
+    public void initializeBeastMode(Uri videoUri, float bot) {
+        this.video = videoUri;
+        this.bot = bot;
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaController = new MediaController(getContext());
@@ -159,8 +160,9 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         }
     }
 
-    public void initializeBeastMode(String videoPath) {
-        path = videoPath;
+    public void initializeBeastMode(String videoPath, float bot) {
+        this.path = videoPath;
+        this.bot = bot;
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaController = new MediaController(getContext());

@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         SRBeastModeVideoView videoView = findViewById(R.id.surface);
         Button button = findViewById(R.id.button);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.hi);
-        videoView.initializeBeastMode(video);
+        videoView.initializeBeastMode(video, 1920);
         //videoView.setDataSource(video);
         //  preview.setSurfaceTextureListener(this);
         button.setOnClickListener(v -> {
