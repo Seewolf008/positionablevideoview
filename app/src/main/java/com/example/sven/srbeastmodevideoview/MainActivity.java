@@ -1,5 +1,6 @@
 package com.example.sven.srbeastmodevideoview;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.button);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.hi);
         videoView.initializeBeastMode(video, 1920);
+        videoView.changeSeekBarColor(Color.WHITE);
         //videoView.setDataSource(video);
         //  preview.setSurfaceTextureListener(this);
         button.setOnClickListener(v -> {

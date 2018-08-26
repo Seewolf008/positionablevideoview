@@ -9,19 +9,24 @@ import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Handler;
 
 /**
@@ -34,11 +39,17 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     private MediaController mediaController;
 
+    private boolean isPrepared;
+
     private Uri video;
 
     private String path;
 
+    private String link;
+
     private float bot;
+
+    private boolean isInternetVideo;
 
     public SRBeastModeVideoView(Context context) {
         super(context);
@@ -56,7 +67,6 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Surface s = new Surface(surface);
@@ -69,8 +79,12 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
                     mediaPlayer.setDataSource(inputStream.getFD());
                     inputStream.close();
                 }
-            } else {
+            } else if (video != null) {
                 mediaPlayer.setDataSource(getContext(), video);
+            } else if (isInternetVideo) {
+                if (!link.equals("")) {
+                    mediaPlayer.setDataSource(link);
+                }
             }
             mediaPlayer.setSurface(s);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -78,9 +92,8 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
                 public void onPrepared(final MediaPlayer mp) {
                     while (mediaPlayer.getVideoHeight() == 0) {
                     }
-                    mediaPlayer.start();
-                    mediaController.setMediaPlayer(SRBeastModeVideoView.this);
-                    mediaController.setAnchorView(SRBeastModeVideoView.this);
+                    isPrepared = true;
+                    mediaPlayer.seekTo(0);
                     mediaController.setEnabled(true);
                     mediaController.show();
                     calculateScaling(bot);
@@ -111,52 +124,16 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
     }
 
-    private float caluclateCrop(float bot) {
-        float distance = (float) mediaPlayer.getVideoHeight() - (float) mediaPlayer.getVideoWidth();
-
-        float reducedBot = bot - (float) mediaPlayer.getVideoWidth();
-
-        float percantage = (float) getWidth() / 100f;
-
-        float perc = reducedBot * 100 / distance;
-
-
-        return perc * percantage;
-    }
-
-    public void changeSeekBarColor(int color) {
-        SeekBar seekBar;
-        LinearLayout root;
-        LinearLayout child;
-        root = (LinearLayout) mediaController.getChildAt(0);
-        child = (LinearLayout) root.getChildAt(1);
-        seekBar = (SeekBar) child.getChildAt(1);
-        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-    }
-
-    public void calculateScaling(float i) {
-        Matrix matrix = new Matrix();
-        float a = ((float) getWidth() / (float) mediaPlayer.getVideoWidth());
-        float b = ((float) getHeight() / (float) mediaPlayer.getVideoHeight());
-        float max = Math.max(a, b);
-        float sx = max / a;
-        float sy = max / b;
-        matrix.setScale(sx, sy, getWidth() / 2f, caluclateCrop(i));
-        setTransform(matrix);
-    }
-
-    public MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
-    }
-
     public void initializeBeastMode(Uri videoUri, float bot) {
         this.video = videoUri;
         this.bot = bot;
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaController = new MediaController(getContext());
+            mediaController.setMediaPlayer(SRBeastModeVideoView.this);
+            mediaController.setAnchorView(SRBeastModeVideoView.this);
             setSurfaceTextureListener(this);
+
         }
     }
 
@@ -166,25 +143,23 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaController = new MediaController(getContext());
+            mediaController.setMediaPlayer(SRBeastModeVideoView.this);
+            mediaController.setAnchorView(SRBeastModeVideoView.this);
             setSurfaceTextureListener(this);
         }
     }
 
-    public void setDataSource(Uri uri) {
-        video = uri;
-    }
-
-    public void setDataSource(String path, float bot) {
-        this.path = path;
+    public void initializeBeastMode(String videoPath, float bot, boolean internet) {
+        this.link = videoPath;
         this.bot = bot;
-    }
-
-    public void start() {
-        mediaPlayer.start();
-    }
-
-    public void pause() {
-        mediaPlayer.pause();
+        isInternetVideo = true;
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+            mediaController = new MediaController(getContext());
+            mediaController.setMediaPlayer(SRBeastModeVideoView.this);
+            mediaController.setAnchorView(SRBeastModeVideoView.this);
+            setSurfaceTextureListener(this);
+        }
     }
 
     @Override
@@ -236,6 +211,91 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     @Override
     public int getAudioSessionId() {
         return 0;
+    }
+
+
+    public void setDataSource(Uri uri) {
+        video = uri;
+    }
+
+    public void setDataSource(String path, float bot) {
+        this.path = path;
+        this.bot = bot;
+    }
+
+    public void start() {
+        mediaPlayer.start();
+    }
+
+    public void pause() {
+        mediaPlayer.pause();
+    }
+
+    private float caluclateCrop(float bot) {
+        float distance = (float) mediaPlayer.getVideoHeight() - (float) mediaPlayer.getVideoWidth();
+
+        float reducedBot = bot - (float) mediaPlayer.getVideoWidth();
+
+        float percantage = (float) getWidth() / 100f;
+
+        float perc = reducedBot * 100 / distance;
+
+
+        return perc * percantage;
+    }
+
+    public void changeSeekBarColor(int color) {
+        SeekBar seekBar;
+        LinearLayout root;
+        LinearLayout child;
+        root = (LinearLayout) mediaController.getChildAt(0);
+        child = (LinearLayout) root.getChildAt(1);
+        seekBar = (SeekBar) child.getChildAt(1);
+        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+    }
+
+    public void calculateScaling(float i) {
+        Matrix matrix = new Matrix();
+        float a = ((float) getWidth() / (float) mediaPlayer.getVideoWidth());
+        float b = ((float) getHeight() / (float) mediaPlayer.getVideoHeight());
+        float max = Math.max(a, b);
+        float sx = max / a;
+        float sy = max / b;
+        matrix.setScale(sx, sy, getWidth() / 2f, caluclateCrop(i));
+        setTransform(matrix);
+    }
+
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    public MediaController getMediaController() {
+        return mediaController;
+    }
+
+    public boolean isPrepared() {
+        return isPrepared;
+    }
+
+    public Uri getVideo() {
+        return video;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public float getBot() {
+        return bot;
+    }
+
+    public boolean isInternetVideo() {
+        return isInternetVideo;
     }
 }
 
