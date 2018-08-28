@@ -4,7 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SRBeastModeVideoView.iml" filepath="$PROJECT_DIR$/SRBeastModeVideoView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/beastmodevideoview/beastmodevideoview.iml" filepath="$PROJECT_DIR$/beastmodevideoview/beastmodevideoview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/beastmodevideoview/beastmodevideoview.iml" filepath="$PROJECT_DIR$/beastmodevideoview/beastmodevideoview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/positionablevideoview.iml" filepath="$PROJECT_DIR$/positionablevideoview.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/positionablevideoview.iml" filepath="$PROJECT_DIR$/.idea/positionablevideoview.iml" />
     </modules>
   </component>

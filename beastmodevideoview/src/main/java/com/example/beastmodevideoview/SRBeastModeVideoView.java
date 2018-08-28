@@ -169,7 +169,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     }
 
     public void initializeBeastMode(String videoPath, float value, int direction) {
-        this.link = videoPath;
+        this.path = videoPath;
         this.direction = direction;
         switch (direction) {
             case 0:
