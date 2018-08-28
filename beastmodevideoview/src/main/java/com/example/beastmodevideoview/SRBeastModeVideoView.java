@@ -96,7 +96,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
                     mediaPlayer.seekTo(0);
                     mediaController.setEnabled(true);
                     mediaController.show();
-                    calculateScaling(bot);
+                    calculateScaling(bot + mediaPlayer.getVideoWidth());
                 }
             });
 
