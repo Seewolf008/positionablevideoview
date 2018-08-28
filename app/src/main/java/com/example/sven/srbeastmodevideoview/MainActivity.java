@@ -14,12 +14,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        /*setContentView(R.layout.activity_main);
 
         SRBeastModeVideoView videoView = findViewById(R.id.surface);
         Button button = findViewById(R.id.button);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.hi);
-        videoView.initializeBeastMode(video, 1920);
+        videoView.initializeBeastMode(video, 1920, SRBeastModeVideoView.BOT);
         videoView.changeSeekBarColor(Color.WHITE);
         //videoView.setDataSource(video);
         //  preview.setSurfaceTextureListener(this);
@@ -29,6 +29,6 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 videoView.start();
             }
-        });
+        });*/
     }
 }
