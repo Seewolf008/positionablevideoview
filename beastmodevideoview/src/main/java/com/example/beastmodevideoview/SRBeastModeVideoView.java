@@ -74,7 +74,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Surface s = new Surface(surface);
-
+        mediaPlayer.reset();
         try {
             if (path != null) {
                 if (!path.equals("")) {
