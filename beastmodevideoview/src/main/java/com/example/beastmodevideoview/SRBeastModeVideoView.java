@@ -38,13 +38,6 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     private String link;
 
-    private float bot;
-
-    private float top;
-
-    private float left;
-
-    private float right;
 
     private boolean isInternetVideo;
 
@@ -54,6 +47,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     public static final int LEFT = 3;
 
     private int direction;
+    private float value;
 
     public SRBeastModeVideoView(Context context) {
         super(context);
@@ -74,7 +68,9 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Surface s = new Surface(surface);
-        mediaPlayer.reset();
+        if(mediaPlayer == null){
+            initMedia();
+        }
         try {
             if (path != null) {
                 if (!path.equals("")) {
@@ -101,17 +97,17 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
                     mediaController.setEnabled(true);
                     mediaController.show();
                     switch (direction) {
-                        case 0:
-                            calculateScalingVertical(top + mediaPlayer.getVideoWidth());
+                        case TOP:
+                            calculateScalingVertical(value + mediaPlayer.getVideoWidth());
                             break;
-                        case 1:
-                            calculateScalingHorizontal(right);
+                        case RIGHT:
+                            calculateScalingHorizontal(value);
                             break;
-                        case 2:
-                            calculateScalingVertical(bot);
+                        case BOT:
+                            calculateScalingVertical(value);
                             break;
-                        case 3:
-                            calculateScalingHorizontal(left + mediaPlayer.getVideoHeight());
+                        case LEFT:
+                            calculateScalingHorizontal(value + mediaPlayer.getVideoHeight());
                             break;
                     }
                 }
@@ -134,6 +130,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         mediaPlayer.pause();
         mediaPlayer.stop();
         mediaPlayer.release();
+        mediaPlayer = null;
         return false;
     }
 
@@ -144,74 +141,26 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     public void initializeBeastMode(Uri videoUri, float value, int direction) {
         this.video = videoUri;
         this.direction = direction;
-        switch (direction) {
-            case 0:
-                this.top = value;
-                break;
-            case 1:
-                this.right = value;
-                break;
-            case 2:
-                this.bot = value;
-                break;
-            case 3:
-                this.left = value;
-                break;
-        }
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-            mediaController = new MediaController(getContext());
-            mediaController.setMediaPlayer(SRBeastModeVideoView.this);
-            mediaController.setAnchorView(SRBeastModeVideoView.this);
-            setSurfaceTextureListener(this);
-
-        }
+        this.value = value;
+        initMedia();
     }
 
     public void initializeBeastMode(String videoPath, float value, int direction) {
         this.path = videoPath;
         this.direction = direction;
-        switch (direction) {
-            case 0:
-                this.top = value;
-                break;
-            case 1:
-                this.right = value;
-                break;
-            case 2:
-                this.bot = value;
-                break;
-            case 3:
-                this.left = value;
-                break;
-        }
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-            mediaController = new MediaController(getContext());
-            mediaController.setMediaPlayer(SRBeastModeVideoView.this);
-            mediaController.setAnchorView(SRBeastModeVideoView.this);
-            setSurfaceTextureListener(this);
-        }
+        this.value = value;
+        initMedia();
     }
 
     public void initializeBeastMode(String videoPath, float value, boolean internet, int direction) {
         this.link = videoPath;
         this.direction = direction;
-        switch (direction) {
-            case 0:
-                this.top = value;
-                break;
-            case 1:
-                this.right = value;
-                break;
-            case 2:
-                this.bot = value;
-                break;
-            case 3:
-                this.left = value;
-                break;
-        }
-        isInternetVideo = true;
+        this.value = value;
+        this.isInternetVideo = true;
+        initMedia();
+    }
+
+    private void initMedia() {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaController = new MediaController(getContext());
@@ -270,16 +219,6 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     @Override
     public int getAudioSessionId() {
         return 0;
-    }
-
-
-    public void setDataSource(Uri uri) {
-        video = uri;
-    }
-
-    public void setDataSource(String path, float bot) {
-        this.path = path;
-        this.bot = bot;
     }
 
     public void start() {
@@ -373,8 +312,8 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
         return link;
     }
 
-    public float getBot() {
-        return bot;
+    public float getValue() {
+        return value;
     }
 
     public boolean isInternetVideo() {
