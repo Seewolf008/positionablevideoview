@@ -129,6 +129,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
         mediaPlayer.pause();
         mediaPlayer.stop();
+        mediaController.hide();
         mediaPlayer.release();
         mediaPlayer = null;
         return false;
@@ -183,7 +184,10 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     @Override
     public int getCurrentPosition() {
-        return mediaPlayer.getCurrentPosition();
+        if(mediaPlayer != null){
+           return mediaPlayer.getCurrentPosition();
+        } 
+        return 0;
     }
 
     @Override
