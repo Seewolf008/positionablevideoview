@@ -127,7 +127,7 @@ public class SRBeastModeVideoView extends TextureView implements TextureView.Sur
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-        mediaPlayer.pause();
+        //mediaPlayer.pause();
         mediaPlayer.stop();
         mediaController.hide();
         mediaPlayer.release();
